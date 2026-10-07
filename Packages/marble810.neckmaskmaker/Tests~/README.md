@@ -2,7 +2,7 @@
 
 本目录脚本以 UnityMCP `execute_code` / Roslyn 方法体运行，不会被 Unity 自动编译（`Tests~`）。已改用独立 namespace/资源路径。合成测试可独立运行；名称含 RealAvatar 的脚本需要当前窗口有效目标与循环线。
 
-独立包新增 `NeckMaskDistributionRegression.cs` 验证程序集、菜单、GUID、偏好迁移和资源定位。迁移自动验收与人工未完项见仓库 `Docs/Validation.md`。下文为历史证据，不能将旧版本描述或旧场景测试结果冒充迁移后的验收。
+独立包新增 `NeckMaskDistributionRegression.cs` 验证程序集、菜单、GUID、偏好迁移和资源定位。下文为历史证据，不能将旧版本描述或旧场景测试结果冒充迁移后的验收。
 
 `Tests~` 不参与 Unity 导入。`.cs` 文件是 UnityMCP `execute_code` 的方法体，不是生产脚本；通过 MCP 执行其全文，选择 Roslyn 编译器。仅使用现有 Unity API 与反射，不引入测试依赖。
 
@@ -84,4 +84,4 @@ Unity 2022.3.22f1，测试工程 `F:/Project_VRC_Local/Test` 使用独立 Packag
 - `NeckMaskGpuRegression.cs`：合成内存 GPU 测试，验证稀疏三角形内的非线性表面求值、重叠 UV 逐贡献平均、扩大 Max Distance、距离/贡献 Buffer 与最终 RT 复用、零值高优先级覆盖、Dilation 和 Alpha（Alpha 恒等于 Mask）。八轮 GPU 外扩对比测试目录内的独立邻居平均参考（生产代码已移除 CPU Mask 管线），8 位输出允许最多 1 级舍入差。
 - Unity 2022.3.22f1 / D3D11 验证全部通过；Compute Shader 消息为空，Preview Shader 支持，Console 无 error。原拓扑回归也通过。
 - 当前真实 Body / Body_Base 各生成一张 1024 RT，覆盖像素分别为 829020 / 587955；合并输出覆盖 936112 像素，PNG 内存编码成功，前后材质引用不变。此记录是固定模型的正确性检查，不是性能基准。
-- 按用户要求未做基线测速，连续拖动、动态姿态、Scene 视觉与实际文件保存由用户手测。使用说明见 `Docs/local/NeckMaskGpuPreview.md`。
+- 按用户要求未做基线测速，连续拖动、动态姿态、Scene 视觉与实际文件保存由用户手测。
