@@ -12,6 +12,14 @@ namespace marble810.NeckMaskMaker
         private const string BodyBaseRole = "Body_base";
         private const string BodyRole = "Body";
 
+        /// <summary>界面显示用的角色名：标注（头）/（身体）区分两个对象；文件名仍使用未加标注的 role。</summary>
+        private static string RoleTitle(string role)
+        {
+            return role == BodyBaseRole
+                ? BodyBaseRole + NeckMaskLoc.T("（身体）")
+                : BodyRole + NeckMaskLoc.T("（头）");
+        }
+
         [Serializable]
         private sealed class MaterialSlotSelection
         {
@@ -26,7 +34,7 @@ namespace marble810.NeckMaskMaker
             // 不使用哈希值作为身份，避免不同对象或槽的缓存碰撞。
             public long Key => ((long)renderer.GetInstanceID() << 32) | (uint)slotIndex;
             public int SubMeshIndex => Math.Min(slotIndex, sourceMesh.subMeshCount - 1);
-            public string Label => $"{role} [{slotIndex}] { (material != null ? material.name : NeckMaskLoc.T("空材质")) }";
+            public string Label => $"{RoleTitle(role)} [{slotIndex}] { (material != null ? material.name : NeckMaskLoc.T("空材质")) }";
             public bool IsValid => target != null && renderer != null && sourceMesh != null
                 && material != null && slotIndex >= 0 && sourceMesh.subMeshCount > 0
                 && sourceMesh.GetTopology(SubMeshIndex) == MeshTopology.Triangles
@@ -107,7 +115,7 @@ namespace marble810.NeckMaskMaker
 
             if (bodyBaseSlots.Count == 0 && bodySlots.Count == 0)
             {
-                EditorGUILayout.HelpBox(NeckMaskLoc.T("没有可用的材质槽，请先设置 Body 与 Body_base。"), MessageType.Info);
+                EditorGUILayout.HelpBox(NeckMaskLoc.T("没有可用的材质槽，请先设置 Body（头）与 Body_base（身体）。"), MessageType.Info);
             }
             else if (bodyBaseSlots.Count == 0 || bodySlots.Count == 0)
             {
@@ -144,12 +152,12 @@ namespace marble810.NeckMaskMaker
             return (available - MaterialColumnSpacing) * 0.5f;
         }
 
-        private void DrawMaterialSlotColumn(string title, List<MaterialSlotSelection> slots, float width)
+        private void DrawMaterialSlotColumn(string role, List<MaterialSlotSelection> slots, float width)
         {
             var options = width > 0f ? GUILayout.Width(width) : GUILayout.ExpandWidth(true);
             using (new EditorGUILayout.VerticalScope(options))
             {
-                EditorGUILayout.LabelField(title, EditorStyles.miniBoldLabel);
+                EditorGUILayout.LabelField(RoleTitle(role), EditorStyles.miniBoldLabel);
                 if (slots.Count == 0)
                 {
                     EditorGUILayout.LabelField(NeckMaskLoc.T("无可用槽"), EditorStyles.miniLabel);

@@ -1,10 +1,12 @@
 // NeckMaskMaker 在 Scene 视图中的 Mask 范围叠加预览。
+// 反转只作用于输出贴图；表面预览用 _Invert 还原，始终显示原始 Mask。
 // 只在编辑器中使用（通过 Shader.Find 加载），不会被打包进 Avatar 构建。
 Shader "Hidden/NeckMaskMaker/NeckMaskPreview"
 {
     Properties
     {
         _MaskTex ("Mask", 2D) = "black" {}
+        _Invert ("Invert", Float) = 0
     }
 
     SubShader
@@ -31,6 +33,7 @@ Shader "Hidden/NeckMaskMaker/NeckMaskPreview"
             #include "UnityCG.cginc"
 
             sampler2D _MaskTex;
+            float _Invert;
 
             struct appdata
             {
@@ -59,6 +62,8 @@ Shader "Hidden/NeckMaskMaker/NeckMaskPreview"
             fixed4 frag(v2f input) : SV_Target
             {
                 float mask = tex2D(_MaskTex, input.uv).r;
+                // 烘焙结果可能已被反转，这里还原，保证红色叠加始终表示原始 Mask 范围。
+                mask = lerp(mask, 1.0 - mask, _Invert);
                 return fixed4(1.0, 40.0 / 255.0, 40.0 / 255.0, mask);
             }
             ENDCG

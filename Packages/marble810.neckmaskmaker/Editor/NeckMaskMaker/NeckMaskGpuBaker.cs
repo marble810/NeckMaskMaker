@@ -100,7 +100,7 @@ namespace marble810.NeckMaskMaker
 
         public int Size => _size;
 
-        /// <summary>是否对最终输出做黑白反转（含 Alpha）。只影响 Pack 阶段的缓存，不重算距离与映射。</summary>
+        /// <summary>输出贴图是否对最终结果做黑白反转（含 Alpha）。只影响 Pack 阶段的缓存与导出/贴图预览；表面预览在 Shader 中还原。</summary>
         public bool Invert { get; set; }
 
         public Target Find(long id) => _targets.TryGetValue(id, out var target) ? target : null;

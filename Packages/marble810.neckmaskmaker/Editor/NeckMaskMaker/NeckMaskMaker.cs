@@ -142,7 +142,7 @@ namespace marble810.NeckMaskMaker
         [SerializeField] private int _textureSize = 1024;
         [SerializeField] private int _dilation = 8;
 
-        /// <summary>输出贴图是否黑白反转；只影响 Pack 阶段，不重算距离与映射。</summary>
+        /// <summary>输出贴图是否黑白反转；只影响 Pack 阶段，不重算距离与映射，表面预览在 Shader 中还原。</summary>
         [SerializeField] private bool _invert;
 
         [SerializeField] private bool _preview;
@@ -460,9 +460,9 @@ namespace marble810.NeckMaskMaker
 
             EditorGUI.BeginChangeCheck();
             _body = (GameObject)EditorGUILayout.ObjectField(
-                new GUIContent("Body", NeckMaskLoc.T("完整身体（含头部）的网格对象。")), _body, typeof(GameObject), true);
+                new GUIContent(RoleTitle(BodyRole), NeckMaskLoc.T("完整身体（含头部）的网格对象。")), _body, typeof(GameObject), true);
             _bodyBase = (GameObject)EditorGUILayout.ObjectField(
-                new GUIContent("Body_base", NeckMaskLoc.T("去掉头部的身体基底，颈部循环线从这里拾取。")), _bodyBase, typeof(GameObject), true);
+                new GUIContent(RoleTitle(BodyBaseRole), NeckMaskLoc.T("去掉头部的身体基底，颈部循环线从这里拾取。")), _bodyBase, typeof(GameObject), true);
             if (EditorGUI.EndChangeCheck())
             {
                 if (_selectionSource != null && _selectionSource != ResolveSelectionSource())
@@ -488,23 +488,23 @@ namespace marble810.NeckMaskMaker
 
             if (_body == null && _bodyBase == null)
             {
-                EditorGUILayout.HelpBox(NeckMaskLoc.T("请先指定 Body 与 Body_base。"), MessageType.Warning);
+                EditorGUILayout.HelpBox(NeckMaskLoc.T("请先指定 Body（头）与 Body_base（身体）。"), MessageType.Warning);
             }
             else
             {
                 if (_bodyBase == null)
                 {
-                    EditorGUILayout.HelpBox(NeckMaskLoc.T("未指定 Body_base：颈部边界线将改为从 Body 拾取（通常需要内部循环选择）。"), MessageType.Info);
+                    EditorGUILayout.HelpBox(NeckMaskLoc.T("未指定 Body_base（身体）：颈部边界线将改为从 Body（头）拾取（通常需要内部循环选择）。"), MessageType.Info);
                 }
 
                 if (_body != null && GetRendererMesh(_body) == null)
                 {
-                    EditorGUILayout.HelpBox(NeckMaskLoc.T("Body 上找不到可用的 MeshRenderer / SkinnedMeshRenderer。"), MessageType.Warning);
+                    EditorGUILayout.HelpBox(NeckMaskLoc.T("Body（头）上找不到可用的 MeshRenderer / SkinnedMeshRenderer。"), MessageType.Warning);
                 }
 
                 if (_bodyBase != null && GetRendererMesh(_bodyBase) == null)
                 {
-                    EditorGUILayout.HelpBox(NeckMaskLoc.T("Body_base 上找不到可用的 MeshRenderer / SkinnedMeshRenderer。"), MessageType.Warning);
+                    EditorGUILayout.HelpBox(NeckMaskLoc.T("Body_base（身体）上找不到可用的 MeshRenderer / SkinnedMeshRenderer。"), MessageType.Warning);
                 }
             }
 
@@ -543,7 +543,7 @@ namespace marble810.NeckMaskMaker
 
             if (source == null)
             {
-                EditorGUILayout.HelpBox(NeckMaskLoc.T("没有可拾取的对象，请先设置 Body_base 或 Body。"), MessageType.Warning);
+                EditorGUILayout.HelpBox(NeckMaskLoc.T("没有可拾取的对象，请先设置 Body_base（身体）或 Body（头）。"), MessageType.Warning);
                 EndCard();
                 return;
             }
@@ -551,7 +551,7 @@ namespace marble810.NeckMaskMaker
             if (_loops.Count == 0)
             {
                 EditorGUILayout.HelpBox(
-                    NeckMaskLoc.T("点击“选择颈部边界线”后，在 Scene 视图中点击 Body_base 颈部的任意一条边，" +
+                    NeckMaskLoc.T("点击“选择颈部边界线”后，在 Scene 视图中点击 Body_base（身体）颈部的任意一条边，" +
                         "工具会自动吸附为整条循环线。Shift + 左键可追加循环线，Enter 确认，Esc 取消。"),
                     MessageType.Info);
                 EndCard();
@@ -597,7 +597,7 @@ namespace marble810.NeckMaskMaker
                 _dilation, 0, 32);
 
             _invert = EditorGUILayout.Toggle(
-                new GUIContent(NeckMaskLoc.T("反转"), NeckMaskLoc.T("对输出的 Mask 贴图做黑白反转（含 Alpha），用于需要反相遮罩的场合。")),
+                new GUIContent(NeckMaskLoc.T("反转"), NeckMaskLoc.T("对输出的 Mask 贴图做黑白反转（含 Alpha），只影响贴图预览与导出的 PNG；表面红色预览仍显示原始 Mask。")),
                 _invert);
 
             if (EditorGUI.EndChangeCheck())
@@ -1099,6 +1099,8 @@ namespace marble810.NeckMaskMaker
         {
             var material = GetPreviewMaterial();
             if (material == null) return;
+            // 反转只改变输出贴图；表面预览把反转还原，始终显示原始 Mask 范围。
+            material.SetFloat("_Invert", _invert ? 1f : 0f);
             foreach (var error in _gpuTargetErrors.Values) { ReportGpuError(error); break; }
             foreach (var slot in GetSelectedMaterialSlots())
             {

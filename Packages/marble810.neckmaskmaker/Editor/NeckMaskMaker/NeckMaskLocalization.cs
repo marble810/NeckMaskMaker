@@ -39,20 +39,22 @@ namespace marble810.NeckMaskMaker
 
             // 目标对象
             { "目标对象", "目标对象", "対象オブジェクト", "Target Objects" },
+            { "（头）", "（头）", "（頭）", " (head)" },
+            { "（身体）", "（身体）", "（体）", " (body)" },
             { "完整身体（含头部）的网格对象。", "完整身体（含头部）的网格对象。", "頭を含む全身のメッシュオブジェクト。", "Mesh object of the full body including the head." },
             { "去掉头部的身体基底，颈部循环线从这里拾取。", "去掉头部的身体基底，颈部循环线从这里拾取。", "頭を除いた身体ベース。ネックの境界線はここから取得します。", "Body base without the head. The neck boundary loop is picked from here." },
             { "刷新网格", "刷新网格", "メッシュ更新", "Refresh Mesh" },
             { "已重新读取网格数据。", "已重新读取网格数据。", "メッシュデータを再読み込みしました。", "Mesh data reloaded." },
-            { "请先指定 Body 与 Body_base。", "请先指定 Body 与 Body_base。", "先に Body と Body_base を指定してください。", "Specify Body and Body_base first." },
-            { "未指定 Body_base：颈部边界线将改为从 Body 拾取（通常需要内部循环选择）。", "未指定 Body_base：颈部边界线将改为从 Body 拾取（通常需要内部循环选择）。", "Body_base が未指定です。ネック境界線は Body から取得します（多くの場合、内側のループ選択が必要です）。", "Body_base is not set: the neck boundary loop will be picked from Body instead (usually requires selecting an inner loop)." },
-            { "Body 上找不到可用的 MeshRenderer / SkinnedMeshRenderer。", "Body 上找不到可用的 MeshRenderer / SkinnedMeshRenderer。", "Body に使用可能な MeshRenderer / SkinnedMeshRenderer がありません。", "No usable MeshRenderer / SkinnedMeshRenderer found on Body." },
-            { "Body_base 上找不到可用的 MeshRenderer / SkinnedMeshRenderer。", "Body_base 上找不到可用的 MeshRenderer / SkinnedMeshRenderer。", "Body_base に使用可能な MeshRenderer / SkinnedMeshRenderer がありません。", "No usable MeshRenderer / SkinnedMeshRenderer found on Body_base." },
+            { "请先指定 Body（头）与 Body_base（身体）。", "请先指定 Body（头）与 Body_base（身体）。", "先に Body（頭）と Body_base（体）を指定してください。", "Specify Body (head) and Body_base (body) first." },
+            { "未指定 Body_base（身体）：颈部边界线将改为从 Body（头）拾取（通常需要内部循环选择）。", "未指定 Body_base（身体）：颈部边界线将改为从 Body（头）拾取（通常需要内部循环选择）。", "Body_base（体）が未指定です。ネック境界線は Body（頭）から取得します（多くの場合、内側のループ選択が必要です）。", "Body_base (body) is not set: the neck boundary loop will be picked from Body (head) instead (usually requires selecting an inner loop)." },
+            { "Body（头）上找不到可用的 MeshRenderer / SkinnedMeshRenderer。", "Body（头）上找不到可用的 MeshRenderer / SkinnedMeshRenderer。", "Body（頭）に使用可能な MeshRenderer / SkinnedMeshRenderer がありません。", "No usable MeshRenderer / SkinnedMeshRenderer found on Body (head)." },
+            { "Body_base（身体）上找不到可用的 MeshRenderer / SkinnedMeshRenderer。", "Body_base（身体）上找不到可用的 MeshRenderer / SkinnedMeshRenderer。", "Body_base（体）に使用可能な MeshRenderer / SkinnedMeshRenderer がありません。", "No usable MeshRenderer / SkinnedMeshRenderer found on Body_base (body)." },
 
             // 目标材质槽
             { "目标材质槽", "目标材质槽", "対象マテリアルスロット", "Target Material Slots" },
             { "全选", "全选", "すべて選択", "Select All" },
             { "全不选", "全不选", "すべて解除", "Deselect All" },
-            { "没有可用的材质槽，请先设置 Body 与 Body_base。", "没有可用的材质槽，请先设置 Body 与 Body_base。", "使用可能なマテリアルスロットがありません。先に Body と Body_base を設定してください。", "No usable material slots. Set Body and Body_base first." },
+            { "没有可用的材质槽，请先设置 Body（头）与 Body_base（身体）。", "没有可用的材质槽，请先设置 Body（头）与 Body_base（身体）。", "使用可能なマテリアルスロットがありません。先に Body（頭）と Body_base（体）を設定してください。", "No usable material slots. Set Body (head) and Body_base (body) first." },
             { "无可用槽", "无可用槽", "スロットなし", "No slots" },
             { "此槽无有效材质或三角形，不能烘焙。", "此槽无有效材质或三角形，不能烘焙。", "このスロットには有効なマテリアルまたは三角形がないためベイクできません。", "This slot has no valid material or triangles and cannot be baked." },
             { "请至少勾选一个有效材质槽。", "请至少勾选一个有效材质槽。", "有効なマテリアルスロットを 1 つ以上選択してください。", "Select at least one valid material slot." },
@@ -64,8 +66,8 @@ namespace marble810.NeckMaskMaker
             { "选择颈部边界线", "选择颈部边界线", "ネック境界線を選択", "Select Neck Boundary Loop" },
             { "结束选择（Enter）", "结束选择（Enter）", "選択を終了（Enter）", "Finish Selection (Enter)" },
             { "清除", "清除", "クリア", "Clear" },
-            { "没有可拾取的对象，请先设置 Body_base 或 Body。", "没有可拾取的对象，请先设置 Body_base 或 Body。", "取得できるオブジェクトがありません。先に Body_base または Body を設定してください。", "No object to pick from. Set Body_base or Body first." },
-            { "点击“选择颈部边界线”后，在 Scene 视图中点击 Body_base 颈部的任意一条边，工具会自动吸附为整条循环线。Shift + 左键可追加循环线，Enter 确认，Esc 取消。", "点击“选择颈部边界线”后，在 Scene 视图中点击 Body_base 颈部的任意一条边，工具会自动吸附为整条循环线。Shift + 左键可追加循环线，Enter 确认，Esc 取消。", "「ネック境界線を選択」を押したあと、Scene ビューで Body_base のネック部分の辺をクリックすると、ループ全体が自動的に選択されます。Shift + 左クリックでループを追加、Enter で確定、Esc でキャンセル。", "After clicking \"Select Neck Boundary Loop\", click any edge around the neck of Body_base in the Scene view and the whole loop is snapped automatically. Shift + Left Click appends another loop, Enter confirms, Esc cancels." },
+            { "没有可拾取的对象，请先设置 Body_base（身体）或 Body（头）。", "没有可拾取的对象，请先设置 Body_base（身体）或 Body（头）。", "取得できるオブジェクトがありません。先に Body_base（体）または Body（頭）を設定してください。", "No object to pick from. Set Body_base (body) or Body (head) first." },
+            { "点击“选择颈部边界线”后，在 Scene 视图中点击 Body_base（身体）颈部的任意一条边，工具会自动吸附为整条循环线。Shift + 左键可追加循环线，Enter 确认，Esc 取消。", "点击“选择颈部边界线”后，在 Scene 视图中点击 Body_base（身体）颈部的任意一条边，工具会自动吸附为整条循环线。Shift + 左键可追加循环线，Enter 确认，Esc 取消。", "「ネック境界線を選択」を押したあと、Scene ビューで Body_base（体）のネック部分の辺をクリックすると、ループ全体が自動的に選択されます。Shift + 左クリックでループを追加、Enter で確定、Esc でキャンセル。", "After clicking \"Select Neck Boundary Loop\", click any edge around the neck of Body_base (body) in the Scene view and the whole loop is snapped automatically. Shift + Left Click appends another loop, Enter confirms, Esc cancels." },
             { "已选择 {0} 条循环线，共 {1} 个顶点", "已选择 {0} 条循环线，共 {1} 个顶点", "{0} 本のループ、合計 {1} 頂点を選択中", "{0} loop(s) selected, {1} vertices in total" },
             { "颈部边界线选择模式", "颈部边界线选择模式", "ネック境界線の選択モード", "Neck Boundary Loop Selection Mode" },
             { "左键点击边线自动吸附整条循环 · Shift + 左键追加 · Enter 确认 · Esc 取消", "左键点击边线自动吸附整条循环 · Shift + 左键追加 · Enter 确认 · Esc 取消", "左クリックで辺をループ全体にスナップ · Shift + 左クリックで追加 · Enter で確定 · Esc でキャンセル", "Left click an edge to snap the whole loop · Shift + Left Click to append · Enter to confirm · Esc to cancel" },
@@ -79,7 +81,7 @@ namespace marble810.NeckMaskMaker
             { "输出贴图尺寸。", "输出贴图尺寸。", "出力テクスチャのサイズ。", "Output texture size." },
             { "烘焙后向 UV 岛外扩张的像素数，用于避免采样时出现接缝。", "烘焙后向 UV 岛外扩张的像素数，用于避免采样时出现接缝。", "ベイク後に UV アイランドの外側へ広げるピクセル数。サンプリング時の継ぎ目を防ぎます。", "Pixels to expand beyond UV islands after baking, to avoid seams when sampling." },
             { "反转", "反转", "反転", "Invert" },
-            { "对输出的 Mask 贴图做黑白反转（含 Alpha），用于需要反相遮罩的场合。", "对输出的 Mask 贴图做黑白反转（含 Alpha），用于需要反相遮罩的场合。", "出力する Mask テクスチャを白黒反転します（Alpha を含む）。反転したマスクが必要な場合に使用します。", "Invert the output mask texture in black and white (including alpha) when an inverted mask is needed." },
+            { "对输出的 Mask 贴图做黑白反转（含 Alpha），只影响贴图预览与导出的 PNG；表面红色预览仍显示原始 Mask。", "对输出的 Mask 贴图做黑白反转（含 Alpha），只影响贴图预览与导出的 PNG；表面红色预览仍显示原始 Mask。", "出力する Mask テクスチャを白黒反転します（Alpha を含む）。テクスチャプレビューと書き出す PNG にのみ反映され、サーフェスプレビューは反転前の Mask を表示します。", "Invert the output mask texture in black and white (including alpha). This affects the texture preview and exported PNG only; the red surface preview still shows the original mask." },
 
             // 预览
             { "预览", "预览", "プレビュー", "Preview" },

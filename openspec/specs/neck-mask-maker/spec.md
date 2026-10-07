@@ -7,7 +7,7 @@
 ## Requirements
 
 ### Requirement: 手工目标与循环线
-工具 MUST 允许指定 Body/Body_base，在 Scene 拾取循环线，Shift 追加、Enter 确认、Esc 取消。对象与选择存于 EditorWindow，不创建 Avatar 配置组件。
+工具 MUST 允许指定 Body/Body_base，在 Scene 拾取循环线，Shift 追加、Enter 确认、Esc 取消。对象与选择存于 EditorWindow，不创建 Avatar 配置组件。界面文案 MUST 在 Body 后标注（头）、Body_base 后标注（身体），三语各自使用对应标注，文件名不受标注影响。
 
 #### Scenario: 多循环线
 - **WHEN** 用户追加互不连接的循环线
@@ -17,8 +17,8 @@
 工具 MUST 在 UV 对应表面位置求值，提供 Linear/Smooth/Constant、Max Distance、Texture Size、Dilation 与输出黑白反转；参数更新复用距离/映射缓存，几何变化重建。工具 MUST NOT 提供生产 CPU Mask 回退。
 
 #### Scenario: 反转输出
-- **WHEN** 用户开启反转后查看预览或导出 PNG
-- **THEN** 每个槽的输出（含 Alpha）黑白互换，距离、映射与外扩缓存不重算
+- **WHEN** 用户开启反转后查看贴图预览或导出 PNG
+- **THEN** 每个槽的输出贴图（含 Alpha）黑白互换，距离、映射与外扩缓存不重算；表面红色预览 MUST 仍显示反转前的原始 Mask 范围
 
 #### Scenario: GPU 不支持
 - **WHEN** 当前设备不支持所需 Compute/RT 格式
