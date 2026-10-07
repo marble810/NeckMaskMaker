@@ -2,6 +2,6 @@
 /Docs/local/
 /Research/
 /ci/
-/Website/
+/Website/index.json
 *.zip
 *.unitypackage
