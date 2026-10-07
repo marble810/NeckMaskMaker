@@ -33,10 +33,21 @@
 
 修正后总列表 run `37652980252` 完成生成与 Pages 部署；下载部署 artifact 验证原列表 ID/URL、Toolbox 的 1.0.0/1.1.0/1.1.1 全部保持，未发布新包未被伪造进版本字典。独立 listing run `37653107171` 成功按预期跳过无 Release 的部署，最新静态 CI run `37653101991` 成功。
 
-## 首次发布仍需验收
+## 首次发布验证（2026-10-08）
 
-- `0.1.0` 未发布开发版本；本次没有 tag/Release。VPM 首次下载、SHA256、VCC 全新安装/升级/卸载/重装，以及 `.unitypackage` 的真实导入仍待首版发布验证。
-- 新仓库跨仓库通知需要配置独立 `VPMLIST_DISPATCH_TOKEN`。旧 Secret 只能确认存在，不能读取/复制；未把个人 GH 登录 Token 写入 CI。
+用户确认发布 Toolbox 1.1.2 与 NeckMaskMaker 0.1.0，并在新仓库配置 `VPMLIST_DISPATCH_TOKEN` 和 `PACKAGE_NAME`。两个 tag、Release 的 ZIP/unitypackage/package.json 均已生成，两个通知 Actions 成功触发总列表更新。未读取或复制个人 Token。
+
+- Toolbox Build Release run `37657087590`、独立列表 `37657128272`、通知 `37657127893` 成功。
+- NeckMaskMaker Build Release run `37657130553`、通知 `37657247806` 成功。
+- 首次独立列表发现缺少上游固定读取的 Website/index.html 和 app.js；补齐模板并新增静态回归，修正后独立列表 run `37657972551` 和静态 CI `37657966746` 成功。源码后续修正仅影响网站/CI，没有改写 0.1.0 tag 或发布 ZIP。
+- 总列表 repository_dispatch run `37657273198` 成功部署；线上总列表现在同时包含 Toolbox 1.1.2 和 NeckMaskMaker 0.1.0，Toolbox 历史版本完整保留。
+- 实际下载两个 Release 的 ZIP，包根清单与独立 package.json 一致，ZIP 完整性通过；总列表与两个独立列表的下载地址、SHA256 和包身份一致。
+- 解读两个 unitypackage 的 pathname，均位于规范 Packages/<package-id>/ 下；Toolbox ZIP 不含 NeckMaskMaker，新包含 Compute/Shader/Editor asmdef。
+- 独立网站已渲染 0.1.0，VCC 添加入口和脚本存在，无未渲染模板占位符。
+
+## 后续仍需手动验收
+
+- VCC 全新安装/升级/卸载/重装与 `.unitypackage` 的真实 Unity 导入。本次没有替换测试工程开发链接或改写 VPM 锁文件。
 - 人工确认 Scene 视觉、滑块跟手、实际鼠标输入拦截与关闭按钮；自动 GPU/导出回归不能替代视觉确认。
 - 最小依赖编译由独立 asmdef 的引用隔离得到支持；没有宣称已另建 SDK-only 空项目或验证所有 GPU 平台。
 
