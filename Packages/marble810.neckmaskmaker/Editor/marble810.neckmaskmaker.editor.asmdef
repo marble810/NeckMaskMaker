@@ -1,0 +1,12 @@
+{
+  "name": "marble810.neckmaskmaker.editor",
+  "rootNamespace": "marble810.NeckMaskMaker",
+  "references": [
+    "VRC.SDK3A",
+    "VRC.SDKBase"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

@@ -1,0 +1,8 @@
+{
+  "packagePath": "Packages/marble810.neckmaskmaker",
+  "changelogPath": "CHANGELOG.md",
+  "listingPublishDirectory": "Website",
+  "listingCiPath": "ci",
+  "vpmListRepository": "marble810/vpmlist",
+  "dispatchEventType": "upstream-package-released"
+}

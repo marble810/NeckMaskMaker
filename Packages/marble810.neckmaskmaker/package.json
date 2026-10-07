@@ -1,0 +1,24 @@
+{
+  "name": "marble810.neckmaskmaker",
+  "displayName": "Neck Mask Maker",
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "unityRelease": "22f1",
+  "description": "VRChat Avatar 颈部遮罩生成工具，GPU 表面采样、逐材质槽预览与 PNG 导出。",
+  "author": {
+    "name": "marble810",
+    "url": "https://github.com/marble810"
+  },
+  "documentationUrl": "https://github.com/marble810/NeckMaskMaker#readme",
+  "changelogUrl": "https://github.com/marble810/NeckMaskMaker/blob/main/CHANGELOG.md",
+  "keywords": [
+    "vrchat",
+    "avatar",
+    "editor",
+    "mask"
+  ],
+  "dependencies": {},
+  "vpmDependencies": {
+    "com.vrchat.avatars": ">=3.10.2"
+  }
+}

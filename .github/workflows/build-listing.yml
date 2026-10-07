@@ -1,0 +1,92 @@
+name: Build Repo Listing
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Build Release
+    types:
+      - completed
+  release:
+    types:
+      - published
+      - created
+      - edited
+      - unpublished
+      - deleted
+      - released
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-listing:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      CONFIG_PATH: .template/release.config.json
+    steps:
+      - name: Checkout local repository
+        uses: actions/checkout@v4
+
+      - name: Resolve template config
+        id: config
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          list_publish_directory="$(jq -r '.listingPublishDirectory' "$CONFIG_PATH")"
+          ci_path="$(jq -r '.listingCiPath' "$CONFIG_PATH")"
+          package_path="$(jq -r '.packagePath' "$CONFIG_PATH")"
+          package_name="$(jq -r '.name' "$package_path/package.json")"
+
+          echo "list_publish_directory=$list_publish_directory" >> "$GITHUB_OUTPUT"
+          echo "ci_path=$ci_path" >> "$GITHUB_OUTPUT"
+          echo "package_name=$package_name" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout package listing automation
+        uses: actions/checkout@v4
+        with:
+          repository: vrchat-community/package-list-action
+          path: ${{ steps.config.outputs.ci_path }}
+          clean: false
+
+      - name: Restore package listing cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.config.outputs.ci_path }}/.nuke/temp
+            ~/.nuget/packages
+          key: ${{ runner.os }}-${{ hashFiles('ci/**/global.json', 'ci/**/*.csproj') }}
+
+      - name: Prepare listing directory
+        run: mkdir -p "${{ steps.config.outputs.list_publish_directory }}"
+
+      - name: Build package version listing
+        run: >-
+          ${{ steps.config.outputs.ci_path }}/build.cmd BuildRepoListing
+          --root ${{ steps.config.outputs.ci_path }}
+          --list-publish-directory $GITHUB_WORKSPACE/${{ steps.config.outputs.list_publish_directory }}
+          --current-package-name ${{ steps.config.outputs.package_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ steps.config.outputs.list_publish_directory }}
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
