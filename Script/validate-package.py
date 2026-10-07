@@ -53,8 +53,9 @@ class PackageBoundaryTests(unittest.TestCase):
         config = json.loads((ROOT / ".template/release.config.json").read_text())
         self.assertEqual(config["packagePath"], "Packages/marble810.neckmaskmaker")
         self.assertEqual(config["vpmListRepository"], "marble810/vpmlist")
-        self.assertTrue((ROOT / config["listingPublishDirectory"] / "index.html").is_file(),
-                        "独立列表首次发布也需要 index.html 模板")
+        for name in ("index.html", "app.js"):
+            self.assertTrue((ROOT / config["listingPublishDirectory"] / name).is_file(),
+                            "上游生成器要求独立列表模板: " + name)
         for path in (ROOT / ".github/workflows").glob("*.yml"):
             self.assertNotIn("Packages/com.example.vpm-package", path.read_text())
         for name in ("symlink-to-unity.ps1", "unlink.ps1"):

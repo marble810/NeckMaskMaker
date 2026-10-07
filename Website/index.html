@@ -44,18 +44,6 @@
     {{~ end ~}}
     <p>请勿将 VPM、开发链接和 unitypackage 重复安装。</p>
   </main>
-  <script type="module">
-    const field = document.getElementById('listing-url');
-    document.getElementById('add-vcc').href = `vcc://vpm/addRepo?url=${encodeURIComponent(field.value)}`;
-    document.getElementById('copy').addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(field.value);
-        document.getElementById('copy').textContent = '已复制';
-      } catch {
-        field.focus(); field.select();
-        document.getElementById('copy').textContent = '请手动复制';
-      }
-    });
-  </script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
