@@ -37,7 +37,21 @@ jobs:
       - name: Checkout local repository
         uses: actions/checkout@v4
 
+      - name: Check published package releases
+        id: releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          releases="$(gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" --paginate --slurp)"
+          ready="$(jq -r 'add | any(.draft == false and any(.assets[]; .name == "package.json") and any(.assets[]; .name | endswith(".zip")))' <<< "$releases")"
+          echo "ready=$ready" >> "$GITHUB_OUTPUT"
+          if [[ "$ready" != 'true' ]]; then
+            echo '尚无完整包 Release，暂不生成独立列表。首版发布后自动生成。' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Resolve template config
+        if: steps.releases.outputs.ready == 'true'
         id: config
         shell: bash
         run: |
@@ -53,6 +67,7 @@ jobs:
           echo "package_name=$package_name" >> "$GITHUB_OUTPUT"
 
       - name: Checkout package listing automation
+        if: steps.releases.outputs.ready == 'true'
         uses: actions/checkout@v4
         with:
           repository: vrchat-community/package-list-action
@@ -60,6 +75,7 @@ jobs:
           clean: false
 
       - name: Restore package listing cache
+        if: steps.releases.outputs.ready == 'true'
         uses: actions/cache@v4
         with:
           path: |
@@ -68,9 +84,11 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('ci/**/global.json', 'ci/**/*.csproj') }}
 
       - name: Prepare listing directory
+        if: steps.releases.outputs.ready == 'true'
         run: mkdir -p "${{ steps.config.outputs.list_publish_directory }}"
 
       - name: Build package version listing
+        if: steps.releases.outputs.ready == 'true'
         run: >-
           ${{ steps.config.outputs.ci_path }}/build.cmd BuildRepoListing
           --root ${{ steps.config.outputs.ci_path }}
@@ -80,13 +98,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup GitHub Pages
+        if: steps.releases.outputs.ready == 'true'
         uses: actions/configure-pages@v5
 
       - name: Upload pages artifact
+        if: steps.releases.outputs.ready == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ steps.config.outputs.list_publish_directory }}
 
       - name: Deploy to GitHub Pages
+        if: steps.releases.outputs.ready == 'true'
         id: deployment
         uses: actions/deploy-pages@v4

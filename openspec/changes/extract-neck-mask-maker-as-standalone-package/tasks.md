@@ -9,9 +9,9 @@
 - [x] 2.3 建立安全 link/unlink 和独立发布骨架
 
 ## 3. 分发
-- [ ] 3.1 创建独立 GitHub Repo 并提交/推送源码（不打发布 tag）
-- [ ] 3.2 追加 VPM 总列表来源，保留用户无关 WIP
-- [ ] 3.3 配置 Pages 与检查通知权限/待办
+- [x] 3.1 创建独立 GitHub Repo 并提交/推送源码（不打发布 tag）
+- [x] 3.2 追加 VPM 总列表来源，保留用户无关 WIP；补充无 Release 来源保护和 4 项 Node 回归
+- [x] 3.3 配置 Pages 与检查通知权限/待办（最小权限 VPMLIST_DISPATCH_TOKEN 待用户配置，未复制个人 Token）
 
 ## 4. 验证与移除
 - [x] 4.1 切换 Unity 工程副本，确认 GUID 无重复和编译成功

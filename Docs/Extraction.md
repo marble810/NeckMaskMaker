@@ -20,7 +20,7 @@
 
 总列表保持 `com.marble810.vpmlist` 与 `https://marble810.github.io/vpmlist/index.json`，source.json 追加新 Repo，不删除 Toolbox 来源/版本。新独立 listing 只列新包。同一包版本在两个列表必须使用相同 Release ZIP 与完整元数据，不能人工编辑生成 JSON。
 
-无 Release 时列表中没有新包，这是预期状态，不代表迁移失败。GitHub Pages、首次 Release、下载哈希及 VCC 安装需按发布验收逐项完成。自动通知 Secret 必须另行配置，已有仓库的 Secret 无法读回/复制。
+无 Release 时列表中没有新包，这是预期状态，不代表迁移失败。上游生成器对无 Release 的来源会抛空集合异常，因此总列表在生成前过滤 CI 副本中的未发布来源，独立列表在无完整版本时跳过部署；仓库配置不删除来源，首版完整上传后自动纳入。API/授权失败不允许冒充没有版本。GitHub Pages、首次 Release、下载哈希及 VCC 安装需按发布验收逐项完成。自动通知 Secret 必须另行配置，已有仓库的 Secret 无法读回/复制。
 
 ## 回滚
 

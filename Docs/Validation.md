@@ -23,6 +23,14 @@
 
 开发脚本创建链接不代表已完成 Unity 导入；Unity 已打开时需等待包重新解析/刷新，必要时重启编辑器。文件清单、目录存在或工具调用成功本身不算编译验收。
 
+## 远端与未发布来源边界
+
+独立 Repo 已创建并推送，`Validate Package` 远端 CI 通过；GitHub Pages 已配置 Actions 部署。
+
+首次把无 Release 的新仓库直接交给 package-list-action 时，总列表生成器报 `AddRange(null)`。新增生成前来源准备与 4 项 Node 回归：无完整包 Release 时只在 CI 工作副本中暂时跳过新来源；发布 package.json 和 ZIP 后自动纳入。API/授权错误必须失败，不静默剔除旧来源。仓库内 source.json 保留两个来源，原总列表 ID/URL/Toolbox 历史版本不变。
+
+独立 listing 同样检查完整包 Release；无版本时成功跳过部署，不发布伪造的包版本。首次失败未部署、未覆盖既有线上 index.json。
+
 ## 首次发布仍需验收
 
 - `0.1.0` 未发布开发版本；本次没有 tag/Release。VPM 首次下载、SHA256、VCC 全新安装/升级/卸载/重装，以及 `.unitypackage` 的真实导入仍待首版发布验证。
