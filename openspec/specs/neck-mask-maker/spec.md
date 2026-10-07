@@ -14,7 +14,11 @@
 - **THEN** 距离计算使用各自线段，不创建跨循环线的伪连接
 
 ### Requirement: GPU 表面采样
-工具 MUST 在 UV 对应表面位置求值，提供 Linear/Smooth/Constant、Max Distance、Texture Size 和 Dilation；参数更新复用距离/映射缓存，几何变化重建。工具 MUST NOT 提供生产 CPU Mask 回退。
+工具 MUST 在 UV 对应表面位置求值，提供 Linear/Smooth/Constant、Max Distance、Texture Size、Dilation 与输出黑白反转；参数更新复用距离/映射缓存，几何变化重建。工具 MUST NOT 提供生产 CPU Mask 回退。
+
+#### Scenario: 反转输出
+- **WHEN** 用户开启反转后查看预览或导出 PNG
+- **THEN** 每个槽的输出（含 Alpha）黑白互换，距离、映射与外扩缓存不重算
 
 #### Scenario: GPU 不支持
 - **WHEN** 当前设备不支持所需 Compute/RT 格式

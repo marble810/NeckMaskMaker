@@ -29,6 +29,7 @@ int _SegmentCount;
 float _MaxDistance;
 int _SamplingMode; // 0 = Linear、1 = Smooth、2 = Constant，与 NeckMaskSamplingMode 一致。
 float _SamplingParameter; // Smooth = 曲率，Constant = 阈值，Linear 无参数。
+int _Invert; // 1 = 输出黑白反转（含 Alpha）。
 
 // 模式值与 NeckMaskSamplingMode 一致：0 = Linear（默认分支）、1 = Smooth、2 = Constant。
 #define SAMPLING_SMOOTH 1
@@ -175,5 +176,6 @@ void Pack(uint3 id : SV_DispatchThreadID)
 {
     if (any(id.xy >= (uint)_Size)) return;
     float mask = floor(saturate(_RawInput.Load(int3(id.xy, 0)).x) * 255.0 + 0.5) / 255.0;
+    if (_Invert != 0) mask = 1.0 - mask;
     _PackedOutput[id.xy] = float4(mask, mask, mask, mask);
 }

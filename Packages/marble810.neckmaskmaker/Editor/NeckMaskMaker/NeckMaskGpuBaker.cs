@@ -40,7 +40,7 @@ namespace marble810.NeckMaskMaker
             internal int geometryVersion = -1, mappedGeometryVersion = -1;
             internal int sampleCount, rawVersion, packedRawVersion = -1;
             internal float maxDistance = float.NaN, samplingParameter;
-            internal int samplingMode = -1, dilation = -1;
+            internal int samplingMode = -1, dilation = -1, invert = -1;
             internal byte[] coverage;
             public RenderTexture Texture { get; internal set; }
             public int CoveredPixels { get; internal set; }
@@ -99,6 +99,10 @@ namespace marble810.NeckMaskMaker
         }
 
         public int Size => _size;
+
+        /// <summary>是否对最终输出做黑白反转（含 Alpha）。只影响 Pack 阶段的缓存，不重算距离与映射。</summary>
+        public bool Invert { get; set; }
+
         public Target Find(long id) => _targets.TryGetValue(id, out var target) ? target : null;
 
         public Target Prepare(long id, Vector2[] uvs, int[] indices, Vector3[] worldVertices,
@@ -151,11 +155,13 @@ namespace marble810.NeckMaskMaker
                 target.mappedGeometryVersion = geometryVersion;
                 target.rawVersion++;
             }
-            if (target.packedRawVersion != target.rawVersion || target.dilation != dilation)
+            int invert = Invert ? 1 : 0;
+            if (target.packedRawVersion != target.rawVersion || target.dilation != dilation || target.invert != invert)
             {
                 PackDilated(target.raw, target.Texture, dilation);
                 target.packedRawVersion = target.rawVersion;
                 target.dilation = dilation;
+                target.invert = invert;
             }
             return target;
         }
@@ -334,6 +340,8 @@ namespace marble810.NeckMaskMaker
                     source = next;
                 }
             }
+            // Pack 是黑白反转的唯一落点：外扩与合并仍按原始 Mask 处理，反转不参与缓存键之外的运算。
+            _shader.SetInt("_Invert", Invert ? 1 : 0);
             _shader.SetTexture(_pack, "_RawInput", source);
             _shader.SetTexture(_pack, "_PackedOutput", destination);
             DispatchPixels(_pack);

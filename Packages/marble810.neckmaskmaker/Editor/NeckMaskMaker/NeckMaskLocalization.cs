@@ -78,6 +78,8 @@ namespace marble810.NeckMaskMaker
             { "二值化阈值（0–1，相对 Max Distance）：归一化距离不超过该值时为 1，超过则为 0。", "二值化阈值（0–1，相对 Max Distance）：归一化距离不超过该值时为 1，超过则为 0。", "二値化しきい値（0–1、Max Distance に対する比率）：正規化距離がこの値以下なら 1、超えると 0。", "Binarization threshold (0-1, relative to Max Distance): normalized distance at or below it is 1, beyond it is 0." },
             { "输出贴图尺寸。", "输出贴图尺寸。", "出力テクスチャのサイズ。", "Output texture size." },
             { "烘焙后向 UV 岛外扩张的像素数，用于避免采样时出现接缝。", "烘焙后向 UV 岛外扩张的像素数，用于避免采样时出现接缝。", "ベイク後に UV アイランドの外側へ広げるピクセル数。サンプリング時の継ぎ目を防ぎます。", "Pixels to expand beyond UV islands after baking, to avoid seams when sampling." },
+            { "反转", "反转", "反転", "Invert" },
+            { "对输出的 Mask 贴图做黑白反转（含 Alpha），用于需要反相遮罩的场合。", "对输出的 Mask 贴图做黑白反转（含 Alpha），用于需要反相遮罩的场合。", "出力する Mask テクスチャを白黒反転します（Alpha を含む）。反転したマスクが必要な場合に使用します。", "Invert the output mask texture in black and white (including alpha) when an inverted mask is needed." },
 
             // 预览
             { "预览", "预览", "プレビュー", "Preview" },

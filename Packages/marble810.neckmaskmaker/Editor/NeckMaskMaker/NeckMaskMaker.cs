@@ -142,6 +142,9 @@ namespace marble810.NeckMaskMaker
         [SerializeField] private int _textureSize = 1024;
         [SerializeField] private int _dilation = 8;
 
+        /// <summary>输出贴图是否黑白反转；只影响 Pack 阶段，不重算距离与映射。</summary>
+        [SerializeField] private bool _invert;
+
         [SerializeField] private bool _preview;
 
         /// <summary>用户选择的颈部循环线。顶点索引指向 <see cref="_selectionSource"/> 的网格。</summary>
@@ -592,6 +595,10 @@ namespace marble810.NeckMaskMaker
             _dilation = EditorGUILayout.IntSlider(
                 new GUIContent("Dilation", NeckMaskLoc.T("烘焙后向 UV 岛外扩张的像素数，用于避免采样时出现接缝。")),
                 _dilation, 0, 32);
+
+            _invert = EditorGUILayout.Toggle(
+                new GUIContent(NeckMaskLoc.T("反转"), NeckMaskLoc.T("对输出的 Mask 贴图做黑白反转（含 Alpha），用于需要反相遮罩的场合。")),
+                _invert);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -1861,6 +1868,7 @@ namespace marble810.NeckMaskMaker
                     ResetMaterialSlotResources();
                     _gpuBaker = new NeckMaskGpuBaker(size);
                 }
+                _gpuBaker.Invert = _invert;
                 foreach (var slot in slots)
                 {
                     long id = slot.Key;
