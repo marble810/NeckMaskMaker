@@ -6,4 +6,4 @@
 
 使用与安装：[仓库文档](https://github.com/marble810/NeckMaskMaker#readme)。VPM 总列表地址保持不变：<https://marble810.github.io/vpmlist/index.json>。
 
-当前 0.1.0 为未发布开发版本，无 Release 时不提供 VPM 下载。
+0.1.0 为首个独立试用版本；以 GitHub Release 和已部署 VPM 列表中的版本为准。

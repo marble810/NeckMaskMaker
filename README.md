@@ -9,7 +9,7 @@ VRChat Avatar 颈部遮罩生成工具，从 [MarbleAvatarToolbox](https://githu
 - 包 ID：`marble810.neckmaskmaker`；菜单：`Tools/Marble/Neck Mask Maker`。
 - VPM 总列表：<https://marble810.github.io/vpmlist/index.json>，保留原订阅即可。
 - 独立列表：<https://marble810.github.io/NeckMaskMaker/index.json>。
-- **当前 0.1.0 是未发布开发版本**。没有 Release 前，两个列表不会提供本包下载；源码仓库存在不表示 VPM 已可安装。
+- **0.1.0 是首个独立试用版本**，下载见 [Release](https://github.com/marble810/NeckMaskMaker/releases/tag/0.1.0)。发布与列表部署完成后可通过 VCC 安装；源码提交本身不会创建新版本。
 - 正式版本优先使用 VCC/VPM。ZIP 根目录即包内容；手工安装放入 `Packages/marble810.neckmaskmaker`。`.unitypackage` 也使用相同 Packages 路径，不要与 VPM、file: 或开发链接重复安装。
 
 ## 使用
@@ -35,7 +35,7 @@ VPM 安装与开发链接互斥；切换前先关闭窗口，备份并清除旧�
 发布脚本与三个 workflow 来自 `marble-vpm-template`，配置位于 `.template/release.config.json`。
 
 1. 先完成待验收项；运行 `pwsh Script/prepare-release.ps1 patch|minor|major` 生成下一版本说明。
-2. 补全文档后再次运行，脚本会 commit、tag、push 并触发 Release。初版如选择 1.0.0 使用 `major`。
+2. 补全文档后再次运行，脚本会 commit、tag、push 并触发 Release。初次 0.1.0 直接使用现有版本清单和对应 CHANGELOG 打同名 tag，后续版本再使用递增脚本。
 3. Release 产出 `.zip`、`.unitypackage`、`package.json`；成功后生成独立 listing，并通知总列表。
 4. 启用 GitHub Pages 的 Actions 部署。自动跨仓库通知还需配置 `VPMLIST_DISPATCH_TOKEN`：目标 `marble810/vpmlist` 的 Contents:write 最小权限 Token；不要复制个人 gh 登录 Token。
 5. 未配置通知 Token 时可在总列表仓库手动运行 `Build Repo Listing`。首个 Release / listing / dispatch 的远端整链测试是首次发布验收，不与源码拆分混为一谈。
